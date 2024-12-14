@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dünyam :D</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background: #000;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Yıldız Animasyonu */
+        .star {
+            position: absolute;
+            background: url('star.png') no-repeat center center;
+            background-size: contain;
+            width: 16px;
+            height: 16px;
+            opacity: 0.8;
+            animation: twinkling 1.5s infinite ease-in-out, moveStar 10s linear infinite;
+        }
+
+        /* Yıldızların yanıp sönme animasyonu */
+        @keyframes twinkling {
+            0% { opacity: 0.8; }
+            50% { opacity: 0.4; }
+            100% { opacity: 0.8; }
+        }
+
+        /* Yıldızların hareket etme animasyonu */
+        @keyframes moveStar {
+            0% {
+                transform: translateX(0) translateY(0);
+            }
+            100% {
+                transform: translateX(var(--moveX)) translateY(var(--moveY));
+            }
+        }
+
+        /* Sayfa Kaplaması */
+        .container {
+            display: flex;
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            background: radial-gradient(circle, rgba(10, 10, 50, 1) 0%, rgba(0, 0, 0, 1) 100%);
+            justify-content: center;
+            align-items: center;
+            flex-direction: column; /* Yükseklik boyunca hizalama */
+            overflow: hidden; /* Taşmaların engellenmesi */
+        }
+
+        h1 {
+            color: #fff;
+            text-align: center;
+            font-size: 50px;
+            position: absolute;
+            top: 10%;
+            width: 100%;
+            font-family:'Courier New', Courier, monospace;
+            z-index: 1;
+        }
+
+        /* Resim ve liste için orta alan */
+        .image-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* Hem yatay hem dikey ortalamak için */
+            text-align: center;
+            display: none;  /* Başlangıçta gizli */
+            z-index: 2;
+        }
+
+        .image-container img {
+            max-width: 400px;
+            width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+            display: none;  /* Başlangıçta resmi gizli tut */
+        }
+
+        /* Açılır liste stil */
+        select {
+            max-width: 90%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        /* Alt butonlar ve ses seviyesi ayarlama */
+        .controls {
+            position: absolute;
+            top: 75%;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            width: 90%; /* Ekran boyutuna göre daha esnek */
+            z-index: 1; /* Kontrollerin başlık ve diğer öğelerin üzerinde olmasını sağla */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .play-button {
+            padding: 20px 15px;
+            margin: 10px;
+            font-size: 16px;
+            color: white;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 250px; /* Maksimum genişlik */
+        }
+        .stop-button {
+            background-color: #f44336;
+            padding: 20px 15px;
+            margin: 10px;
+            font-size: 16px;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            width: 100%;
+            max-width: 250px; /* Maksimum genişlik */
+        }
+        input[type="range"] {
+            width: 20%;
+            margin: 15px 0;
+            max-width: 20%;
+        }
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 24px; /* Başlık boyutunu küçült */
+            }
+            .image-container img {
+                max-width: 100%; /* Resimleri ekran boyutuna göre küçült */
+            }
+            .controls {
+                flex-direction: column; /* Butonları alt alta sırala */
+                width: 90%;
+            }
+            .play-button, .stop-button {
+                padding: 15px;
+                font-size: 14px;
+            }
+        }
+        @media (max-width: 480px) {
+            .controls {
+                display: flex;
+                flex-direction: column; /* Alt alta sıralama */
+                align-items: center; /* Ortala */
+            }
+            .star {
+                width: 100%; /* Yıldız boyutunu küçült */
+                align-items: center;
+            }
+        }
+
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1 id="title">Ahmet Hamza'nın Dünyası. </h1>
+
+        <!-- Yıldızlar -->
+        <div class="star" style="top: 10%; left: 15%; --moveX: 500px; --moveY: 200px;"></div>
+        <div class="star" style="top: 50%; left: 30%; --moveX: -400px; --moveY: -300px;"></div>
+        <div class="star" style="top: 70%; left: 45%; --moveX: 300px; --moveY: 500px;"></div>
+        <div class="star" style="top: 90%; left: 60%; --moveX: -200px; --moveY: 400px;"></div>
+        <div class="star" style="top: 30%; left: 70%; --moveX: 400px; --moveY: -500px;"></div>
+
+        <div class="btn-group">
+            <!-- Resim ve Açılır Liste Alanı -->
+            <div class="image-container" id="imageContainer">
+                <img id="displayedImage" src="" alt="Seçilen Resim">
+                <select id="imageSelector" onchange="changeImage(); playSound();">
+                    <option value="">Pixel Seçin</option>
+                    <option value="pixed144.png">144 Pixel</option>
+                    <option value="pixed244.png">244 Pixel</option>
+                    <option value="pixed480.png">480 Pixel</option>
+                    <option value="pixed720.png">720 Pixel</option>
+                    <option value="byza.jpg">1080 Pixel</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Kontroller (Butonlar ve Ses Seviyesi Ayarlayıcı) -->
+        <div class="controls">
+            <button class="play-button" onclick="playSound()">Sesi Aç</button>
+            <button class="stop-button" onclick="stopSound()">Sesi Kapat</button>
+            <br>
+            <input type="range" id="volumeControl" min="0" max="1" step="0.01" value="1" onchange="changeVolume()">
+            <label for="volumeControl">Ses Seviyesi</label>
+        </div>
+
+        <audio id="audioElement" src="Neşe-Karaböcek-Gözlerin-Eladır-Yar.mp3"></audio>
+
+
+    <script>
+        // ses dosyalrı Oluşturuluyor
+        const audio = document.getElementById('audioElement');
+        const volumeControl = document.getElementById('volumeControl');
+
+        let isPlaying = false;
+
+        function playSound() {
+            if (!isPlaying) {  // Şarkı çalmıyorsa
+                audio.currentTime = 15;  // Sesin zamanını 30 saniye ileri al
+                audio.play();  // Sesi başlat
+                isPlaying = true;  // Şarkı çalmaya başlasın
+            }
+        }
+
+        function stopSound() {
+            audio.pause();  // Ses durduruluyor
+            audio.currentTime = 0;  // Ses sıfırlanıyor
+            isPlaying = false;  // Şarkı çalmıyor olarak işaretleniyor
+        }
+        function changeVolume() {
+            audio.volume = volumeControl.value;
+        }
+       
+        // Rastgele Yıldızlar Oluşturuluyor
+        function createStars(numStars) {
+            for (let i = 0; i < numStars; i++) {
+                let star = document.createElement('div');
+                star.classList.add('star');
+                star.style.top = Math.random() * 100 + '%';
+                star.style.left = Math.random() * 100 + '%';
+
+                // Yıldızların rastgele hareket etmesi için X ve Y koordinatlarını ayarlıyoruz
+                let moveX = (Math.random() * 1000 - 500) + "px";  // -500px ile +500px arasında hareket
+                let moveY = (Math.random() * 1000 - 500) + "px";  // -500px ile +500px arasında hareket
+
+                star.style.setProperty('--moveX', moveX);
+                star.style.setProperty('--moveY', moveY);
+
+                document.body.appendChild(star);
+            }
+        }
+
+        // 200 Rastgele Yıldız Oluşturuluyor
+        createStars(200);
+
+        // Sayfa yüklendikçe image-container'ı göster
+        window.onload = function() {
+            document.getElementById('imageContainer').style.display = 'block';
+        };
+
+        // Resmi değiştiren fonksiyon
+        function changeImage() {
+            const selector = document.getElementById('imageSelector');
+            const selectedValue = selector.value;
+            const imageElement = document.getElementById('displayedImage');
+            const titleElement = document.getElementById('title');
+
+            let customText = "";
+            if (selectedValue === "pixed144.png") {
+                customText = " 144 Pixel Dünyası.";  // pixed144 için metin
+            } else if (selectedValue === "pixed244.png") {
+                customText = " 244 Pixel Dünyası.";  // pixed244 için metin
+            } else if (selectedValue === "pixed480.png") {
+                customText = " 480 Pixel Dünyası.";  // pixed480 için metin
+            } else if (selectedValue === "pixed720.png") {
+                customText = " 720 Pixel Dünyası.";  // pixed720 için metin
+            } else if (selectedValue === "byza.jpg") {
+                customText = " Gözünden 1080 Pixel Dünya. :) :) :)";  // byza.jpg için metin 1080px happy World. :) :) :)
+            }
+
+            if (selectedValue) {   
+                imageElement.src = selectedValue;
+                imageElement.style.display = 'block';  // Resmi göster
+                titleElement.innerHTML = "Ahmet Hamza'nın " + customText;
+                
+            } else {
+                titleElement.innerHTML = "Ahmet Hamza'nın Gözünden Dünya. ";
+                //document.getElementById('title').style.display = 'block';
+                imageElement.style.display = 'none';  // Resmi gizle
+            }
+        }
+        
+    </script>
+</body>
+</html>
