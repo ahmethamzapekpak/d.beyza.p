@@ -129,6 +129,7 @@
             cursor: pointer;
             width: 100%;
             max-width: 250px; /* Maksimum genişlik */
+
         }
         input[type="range"] {
             width: 20%;
@@ -162,14 +163,36 @@
                 align-items: center;
             }
         }
+        .styled-link {
+            display: inline-block;
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+            background: linear-gradient(45deg, #57a05a, #253326);
+            text-decoration: none;
+            border-radius: 25px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
 
+        .styled-link:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        .styled-link:active {
+            transform: translateY(0);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+        
 
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1 id="title">Ahmet Hamza'nın Dünyası. </h1>
+        <h1 id="title">Ahmet Hamza'nın Dünyası. <br> Site Özel Fotoğraf içerdiği için <br> Hizmet Vermmesini Engelledim. <br>Tekrar Hizmet Vermesini istiyorsanız İletişime Geçiniz. İletişim İçin: <br><br> <a href="https://t.me/ahmethamzapekpak" class="styled-link" target="_blank">Telegram ile İletişime Geç</a></h1>
 
         <!-- Yıldızlar -->
         <div class="star" style="top: 10%; left: 15%; --moveX: 500px; --moveY: 200px;"></div>
@@ -177,21 +200,6 @@
         <div class="star" style="top: 70%; left: 45%; --moveX: 300px; --moveY: 500px;"></div>
         <div class="star" style="top: 90%; left: 60%; --moveX: -200px; --moveY: 400px;"></div>
         <div class="star" style="top: 30%; left: 70%; --moveX: 400px; --moveY: -500px;"></div>
-
-        <div class="btn-group">
-            <!-- Resim ve Açılır Liste Alanı -->
-            <div class="image-container" id="imageContainer">
-                <img id="displayedImage" src="" alt="Seçilen Resim">
-                <select id="imageSelector" onchange="changeImage(); playSound();">
-                    <option value="">Pixel Seçin</option>
-                    <option value="pixed144.png">144 Pixel</option>
-                    <option value="pixed244.png">244 Pixel</option>
-                    <option value="pixed480.png">480 Pixel</option>
-                    <option value="pixed720.png">720 Pixel</option>
-                    <option value="byza.jpg">1080 Pixel</option>
-                </select>
-            </div>
-        </div>
 
         <!-- Kontroller (Butonlar ve Ses Seviyesi Ayarlayıcı) -->
         <div class="controls">
@@ -255,38 +263,6 @@
         window.onload = function() {
             document.getElementById('imageContainer').style.display = 'block';
         };
-
-        // Resmi değiştiren fonksiyon
-        function changeImage() {
-            const selector = document.getElementById('imageSelector');
-            const selectedValue = selector.value;
-            const imageElement = document.getElementById('displayedImage');
-            const titleElement = document.getElementById('title');
-
-            let customText = "";
-            if (selectedValue === "pixed144.png") {
-                customText = " 144 Pixel Dünyası.";  // pixed144 için metin
-            } else if (selectedValue === "pixed244.png") {
-                customText = " 244 Pixel Dünyası.";  // pixed244 için metin
-            } else if (selectedValue === "pixed480.png") {
-                customText = " 480 Pixel Dünyası.";  // pixed480 için metin
-            } else if (selectedValue === "pixed720.png") {
-                customText = " 720 Pixel Dünyası.";  // pixed720 için metin
-            } else if (selectedValue === "byza.jpg") {
-                customText = " Gözünden 1080 Pixel Dünya. :) :) :)";  // byza.jpg için metin 1080px happy World. :) :) :)
-            }
-
-            if (selectedValue) {   
-                imageElement.src = selectedValue;
-                imageElement.style.display = 'block';  // Resmi göster
-                titleElement.innerHTML = "Ahmet Hamza'nın " + customText;
-                
-            } else {
-                titleElement.innerHTML = "Ahmet Hamza'nın Gözünden Dünya. ";
-                //document.getElementById('title').style.display = 'block';
-                imageElement.style.display = 'none';  // Resmi gizle
-            }
-        }
         
     </script>
 </body>
